@@ -1,47 +1,82 @@
-get:
-  summary: List all tasks
-  tags:
-    - Tasks
-  parameters:
-    - name: completed
-      in: query
-      required: false
-      description: Filter tasks by completion status
-      schema:
-        type: boolean
-        example: true
-    - name: limit
-      in: query
-      required: false
-      description: Maximum number of tasks to return
-      schema:
-        type: integer
-        example: 10
-  responses:
-    '200':
-      description: OK
-      content:
-        application/json:
+paths:
+  /tasks:
+    get:
+      summary: List all tasks
+      tags:
+        - Tasks
+      parameters:
+        - name: completed
+          in: query
+          required: false
+          description: Filter tasks by completion status
           schema:
-            type: array
-            items:
+            type: boolean
+            example: true
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of tasks to return
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../components/schemas/Task.yaml
+    post:
+      summary: Create a new task
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               $ref: ../components/schemas/Task.yaml
-post:
-  summary: Create a new task
-  tags:
-    - Tasks
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: ../components/schemas/Task.yaml
-  responses:
-    '201':
-      description: Task created succesfully
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/Task.yaml
-    '400':
-      $ref: ../components/responses/BadRequest.yaml
+      responses:
+        '201':
+          description: Task created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: ../components/schemas/Task.yaml
+        '400':
+          $ref: ../components/responses/BadRequest.yaml
+    /tasks/{id}:
+      get:
+        sumary: Get a task by id
+        tags: 
+          - Tasks
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: The ID of the task to be retreived
+            schema:
+              type: integer
+              example: 1
+        responses: 
+        '200':
+          description: Task found and returned succesfully
+          content:
+            application/json:
+              schema: 
+                $ref: ../components/schemas/Task.yaml
+        '400':
+          description: Validation error (invalid ID)
+          content:
+            application/json:
+              schema: 
+                $ref: ../components/schemas/validationError.yaml
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema: 
+                $ref: ../components/schemas/notFoundError.yaml
+

@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body , param } from 'express-validator';
 import { checkValidationResults } from './handleValidationErrors.js';
 
 export const validateTask = [
@@ -18,3 +18,4 @@ export const validateTask = [
 
   checkValidationResults,
 ];
+
